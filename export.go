@@ -23,29 +23,23 @@ func initAnaconda() *anaconda.TwitterApi {
 }
 
 func main() {
-
-	const count = "200"
-	const skipStatus = "false"
-	const includeUserEntities = "false"
-
 	api := initAnaconda()
 
 	params := url.Values{}
-	params.Set("count", count)
-	params.Set("skip_status", skipStatus)
+	params.Set("count", "200")
+	params.Set("skip_status", "false")
 	params.Set("include_user_entities", "false")
 	params.Set("exclude_replies", "true")
 	params.Set("include_rts", "false")
 
 	tweets, err := api.GetUserTimeline(params)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 
 	for _, tweet := range tweets {
 
 		filename := fmt.Sprintf("%s/%s.md", os.Getenv("HUGO_POST_PATH"), tweet.IdStr)
-
 		file, err := os.Create(filename)
 		if err != nil {
 			log.Fatal(err)
@@ -86,10 +80,6 @@ func main() {
 
 		content = append(content, description)
 		content = append(content, title)
-
-		// add a tag?
-		// tag := fmt.Sprintf("tags: [\"twitter\"]")
-		// content = append(content, tag)
 
 		// I think it's a good idea to save the status id
 		twitterStatusId := fmt.Sprintf("statusId: \"%s\"", tweet.IdStr)
