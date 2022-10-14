@@ -23,6 +23,7 @@ func initAnaconda() *anaconda.TwitterApi {
 }
 
 func main() {
+
 	api := initAnaconda()
 
 	params := url.Values{}
@@ -115,6 +116,11 @@ func main() {
 		content = append(content, "---")
 		content = append(content, "\n")
 		content = append(content, tweet.FullText)
+		content = append(content, "\n")
+
+		for _, image := range images {
+			content = append(content, fmt.Sprintf("![](/%s)", strings.ReplaceAll(image, "\"", "")))
+		}
 
 		post := strings.Join(content, "\n")
 		_, err = fmt.Fprintln(file, post)
