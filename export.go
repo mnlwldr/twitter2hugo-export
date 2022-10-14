@@ -51,8 +51,8 @@ func main() {
 
 		content = append(content, "---")
 
+		// we can use CreatedAt from the tweet as date for the post
 		date := fmt.Sprintf("date: \"%s\"", tweet.CreatedAt)
-
 		content = append(content, date)
 
 		fullText := tweet.FullText
@@ -66,17 +66,34 @@ func main() {
 		description := fmt.Sprintf("description: \"%s\"", fullText)
 		title := fmt.Sprintf("title: \"%s\"", fullText)
 
+		// shorten the tweet for the title
+		// Google say the max length of the title should be around 50 - 60
+		// So if the length of the tweet over 60 characters, we short it to 57 + "..."
 		if len(fullText) > 60 {
 
 			// substring the full text to a length of 60
-			fullText = fullText[0:59]
+			fullText = fullText[0:57]
 
 			// trim the full text
 			fullText = strings.TrimSpace(fullText)
 
-			/* overwrite description and title */
-			description = fmt.Sprintf("description: \"%s\"", fullText)
-			title = fmt.Sprintf("title: \"%s\"", fullText)
+			// Google say the max lenght of the title should be around 50 - 60
+			title = fmt.Sprintf("title: \"%s...\"", fullText)
+
+		}
+
+		// shorten the tweet for the description
+		// Google say the max length of the description should be around 150 - 160
+		// So if the length of the tweet over 160 characters, we short it to 157 + "..."
+		if len(fullText) > 160 {
+
+			// substring the full text to a length of 60
+			fullText = fullText[0:157]
+
+			// trim the full text
+			fullText = strings.TrimSpace(fullText)
+
+			description = fmt.Sprintf("description: \"%s...\"", fullText)
 		}
 
 		content = append(content, description)
